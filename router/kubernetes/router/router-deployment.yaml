@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: router
+spec:
+  selector:
+    app: router-pod
+  ports:
+    - protocol: "TCP"
+      port: 8201
+      targetPort: 8201
+    # - protocol: 'TCP'
+    #   port: 443
+    #   targetPort: 443
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: router
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: router-pod
+  template:
+    metadata:
+      labels:
+        app: router-pod
+    spec:
+      containers:
+        - name: router
+          image: kaiii708/small-router-demo:latest
+          ports:
+            - containerPort: 8201
+          resources:
+            limits:
+              cpu: 1m
+            requests:
+              cpu: 1m

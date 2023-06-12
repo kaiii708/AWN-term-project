@@ -1,0 +1,24 @@
+# vpa.yaml
+
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: proxy
+  namespace: default
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: proxy
+  updatePolicy:
+    updateMode: "Auto"
+  resourcePolicy:
+    containerPolicies:
+      - containerName: "proxy"
+        minAllowed:
+          cpu: 2m
+          # memory: 50Mi
+        maxAllowed:
+          cpu: 200m
+          # memory: 500Mi
+        controlledResources: ["cpu"]
